@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.artichourey.ecommerce.orderservice.dto.InventoryResponse;
 
-@FeignClient(name="inventory-service",url = "http://localhost:8086")
+@FeignClient(name="inventory-service")
 public interface InventoryFeignClient {
 	
 	@GetMapping("/api/inventory/{skuCode}")
