@@ -1,6 +1,54 @@
 spring:
   kafka:
     bootstrap-servers: localhost:9092
+
+    
+    # CONSUMER CONFIG (receiving events)
+    
+    consumer:
+      group-id: order-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+
+      properties:
+        # Delegate JSON deserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+
+        # Allow only trusted packages (replace with your event package)
+        spring.json.trusted.packages: com.artichourey.ecommerce.events
+
+        # Enable type headers (needed for multiple event types)
+        spring.json.use.type.headers: true
+
+    
+    # PRODUCER CONFIG (sending events)
+    
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer	
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all                      # wait for leader and replicas
+      retries: 10                    # retry if broker temporarily unavailable
+      max-in-flight-requests-per-connection: 1
+    #  transaction-id-prefix: order-tx-  # enable transactions if needed
+
+      properties:
+        # Add type headers (CRITICAL for microservices)
+        spring.json.add.type.headers: true
+
+   
+    # LISTENER CONFIG
+    
+    listener:
+      missing-topics-fatal: false
+      ack-mode: record
+      concurrency: 3  # optional: handle multiple messages concurrently
+
+springdoc:
+   api-docs:
+     enabled: true
+   swagger-ui:
+     enabled: true
+   override-with-generic-response: false
+   default-produces-media-type: application/json
+   default-consumes-media-type: application/json
