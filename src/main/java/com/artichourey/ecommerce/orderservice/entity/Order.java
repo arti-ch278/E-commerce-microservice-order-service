@@ -2,7 +2,11 @@ package com.artichourey.ecommerce.orderservice.entity;
 
 import java.math.BigDecimal;
 
+import com.artichourey.ecommerce.orderservice.enums.OrderStatus;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,6 +28,9 @@ public class Order {
 	private String skuCode;
 	private Integer quantity;
 	private BigDecimal price;
-	private String orderStatus;
+	@Enumerated(EnumType.STRING)
+	private OrderStatus orderStatus;
+	
+	private Long userId;
 
 }
