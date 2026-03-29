@@ -19,20 +19,33 @@ public class GlobalExceptionHandler {
 	
 	private final Logger log= LoggerFactory.getLogger(GlobalExceptionHandler.class);
 	
-	// Handle Runtime exceptions (like out-of-stock)
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
-        log.error("Runtime exception occurred: {}", ex.getMessage(), ex);
+	// Handle Order not found exception
+	@ExceptionHandler(OrderNotFoundException.class)
+	public ResponseEntity<Object> handleOrderNotFoundException(OrderNotFoundException ex) {
+	    log.error("Order not found: {}", ex.getMessage(), ex);
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("error", "Bad Request");
-        body.put("message", ex.getMessage());
+	    Map<String, Object> body = new HashMap<>();
+	    body.put("timestamp", LocalDateTime.now());
+	    body.put("status", HttpStatus.NOT_FOUND.value());
+	    body.put("error", "Not Found");
+	    body.put("message", ex.getMessage());
 
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-    }
+	    return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+	}
+	// Handle out of stock exception
+	@ExceptionHandler(OutOfStockException.class)
+	public ResponseEntity<Object> handleOutOfStockException(OutOfStockException ex) {
+	    log.warn("Out of stock: {}", ex.getMessage());
 
+	    Map<String, Object> body = new HashMap<>();
+	    body.put("timestamp", LocalDateTime.now());
+	    body.put("status", HttpStatus.CONFLICT.value());
+	    body.put("error", "Conflict");
+	    body.put("message", ex.getMessage());
+
+	    return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+	}
+	
     // Handle validation errors (@Valid or @Validated)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -78,19 +91,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    // Handle Feign client exceptions (errors from InventoryFeignClient)
-    @ExceptionHandler(FeignException.class)
-    public ResponseEntity<Object> handleFeignException(FeignException ex) {
-        log.error("Feign client error: {}", ex.getMessage(), ex);
-
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", ex.status());
-        body.put("error", "Feign Client Error");
-        body.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.valueOf(ex.status()));
-    }
 
     // Catch-all for other exceptions
     @ExceptionHandler(Exception.class)
