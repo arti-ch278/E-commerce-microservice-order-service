@@ -14,9 +14,6 @@ public class OrderMapper {
 		order.setPrice(request.getPrice());
 		order.setQuantity(request.getQuantity());
 	    order.setSkuCode(request.getSkuCode());
-	   
-	    
-		
 		return order;
 		
 		
