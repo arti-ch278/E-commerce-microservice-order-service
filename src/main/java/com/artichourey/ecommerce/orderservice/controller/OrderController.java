@@ -43,35 +43,4 @@ public class OrderController {
                 .body(orderService.placeOrder(orderRequest));
     }
 
-//    @Operation(
-//        summary = "Confirm an order",
-//        description = "Marks the specified order as confirmed. JWT authentication required.",
-//        security = @SecurityRequirement(name = "bearerAuth")
-//    )
-//    @ApiResponses({
-//        @ApiResponse(responseCode = "204", description = "Order confirmed successfully"),
-//        @ApiResponse(responseCode = "404", description = "Order not found"),
-//        @ApiResponse(responseCode = "401", description = "Unauthorized")
-//    })
-//    @PatchMapping("/{orderId}/confirm")
-//    public ResponseEntity<Void> confirmOrder(@PathVariable String orderId) {
-//        orderService.confirmOrder(orderId);
-//        return ResponseEntity.noContent().build();
-//    }
-//
-//    @Operation(
-//        summary = "Fail an order",
-//        description = "Marks the specified order as failed. JWT authentication required.",
-//        security = @SecurityRequirement(name = "bearerAuth")
-//    )
-//    @ApiResponses({
-//        @ApiResponse(responseCode = "204", description = "Order marked as failed"),
-//        @ApiResponse(responseCode = "404", description = "Order not found"),
-//        @ApiResponse(responseCode = "401", description = "Unauthorized")
-//    })
-//    @PatchMapping("/{orderId}/fail")
-//    public ResponseEntity<Void> failOrder(@PathVariable String orderId) {
-//        orderService.failOrder(orderId);
-//        return ResponseEntity.noContent().build();
-//    }
 }
