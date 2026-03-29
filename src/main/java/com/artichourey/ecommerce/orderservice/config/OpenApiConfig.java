@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -22,7 +22,7 @@ public class OpenApiConfig {
     public OpenAPI orderServiceAPI() {
 
         SecurityScheme securityScheme = new SecurityScheme()
-                .name("Authorization") // 🔥 IMPORTANT (not bearerAuth)
+                .name("Authorization")
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
                 .bearerFormat("JWT");
@@ -33,7 +33,7 @@ public class OpenApiConfig {
                         .description("Order Management APIs for E-commerce Platform")
                         .version("1.0"))
 
-                // 🔥 THIS FIXES YOUR MAIN ISSUE (VERY IMPORTANT)
+             
                 .servers(List.of(new Server().url("/")))
 
                 .components(new Components()
