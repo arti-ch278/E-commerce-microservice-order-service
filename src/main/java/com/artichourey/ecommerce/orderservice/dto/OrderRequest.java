@@ -25,5 +25,5 @@ public class OrderRequest {
 	@NotNull(message="price is mendatory")
 	@Schema(description = "Price of the product", example = "499.99", required = true)
 	private BigDecimal price;
-	private Long UserId;
+	private Long userId;
 }
