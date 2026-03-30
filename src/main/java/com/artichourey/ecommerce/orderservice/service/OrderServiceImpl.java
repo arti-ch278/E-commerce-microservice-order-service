@@ -1,7 +1,9 @@
 package com.artichourey.ecommerce.orderservice.service;
 
 import java.util.UUID;
+
 import org.springframework.stereotype.Service;
+
 import com.artichourey.ecommerce.events.PaymentRequestEvent;
 import com.artichourey.ecommerce.events.StockFailedEvent;
 import com.artichourey.ecommerce.events.StockReservedEvent;
@@ -14,6 +16,8 @@ import com.artichourey.ecommerce.orderservice.mapper.OrderMapper;
 import com.artichourey.ecommerce.orderservice.producer.OrderEventProducer;
 import com.artichourey.ecommerce.orderservice.producer.PaymentEventProducer;
 import com.artichourey.ecommerce.orderservice.repository.OrderRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,10 +30,15 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderEventProducer orderEventProducer;
     private final PaymentEventProducer paymentEventProducer;
+    
+    private String logId() {
+        return UUID.randomUUID().toString();
+    }
 
     @Override
+    @Transactional
     public OrderResponse placeOrder(OrderRequest orderRequest) {
-        String logId = UUID.randomUUID().toString(); // Unique log correlation ID
+    	String logId = logId();
         log.info("[{}] Initiating order placement | skuCode={}, quantity={}, userId={}",
                 logId, orderRequest.getSkuCode(), orderRequest.getQuantity(), orderRequest.getUserId());
 
@@ -50,13 +59,14 @@ public class OrderServiceImpl implements OrderService {
         // Send Kafka event
         orderEventProducer.sendOrderEvent(savedOrder);
         log.info("[{}] OrderPlacedEvent sent to Kafka | orderId={}", logId, orderId);
+        
 
         return orderMapper.toResponse(savedOrder);
     }
 
     @Override
     public void confirmOrder(String orderId) {
-        String logId = UUID.randomUUID().toString();
+    	 String logId = logId();
         log.info("[{}] Processing order confirmation | orderId={}", logId, orderId);
 
         Order order = getOrderOrThrow(orderId);
@@ -74,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void failOrder(String orderId) {
-        String logId = UUID.randomUUID().toString();
+    	 String logId = logId();
         log.info("[{}] Processing order failure | orderId={}", logId, orderId);
 
         Order order = getOrderOrThrow(orderId);
@@ -97,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void handleStockReserved(StockReservedEvent event) {
-        String logId = UUID.randomUUID().toString();
+    	 String logId = logId();
         log.info("[{}] Received STOCK_RESERVED event | orderId={}, skuCode={}, quantity={}",
                 logId, event.getOrderId(), event.getSkuCode(), event.getQuantity());
 
@@ -130,7 +140,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void handleStockFailed(StockFailedEvent event) {
-        String logId = UUID.randomUUID().toString();
+    	 String logId = logId();
         log.warn("[{}] Received STOCK_FAILED event | orderId={}, reason={}",
                 logId, event.getOrderId(), event.getReason());
 
