@@ -15,8 +15,17 @@ public class PaymentEventProducer {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
+//    public void sendPaymentRequest(PaymentRequestEvent event) {
+//        log.info("Sending payment request event | orderId={}", event.getOrderId());
+//        kafkaTemplate.send("payment-request-topic", event.getOrderId(), event);
+//    }
+    
     public void sendPaymentRequest(PaymentRequestEvent event) {
-        log.info("Sending payment request event | orderId={}", event.getOrderId());
+        log.info("Sending payment request event | orderId={}, amount={}", 
+                 event.getOrderId(), event.getAmount());
+        
         kafkaTemplate.send("payment-request-topic", event.getOrderId(), event);
     }
+    
+    
 }
