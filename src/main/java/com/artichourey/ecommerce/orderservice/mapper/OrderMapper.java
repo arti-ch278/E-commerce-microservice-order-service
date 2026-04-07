@@ -14,13 +14,12 @@ public class OrderMapper {
 		order.setPrice(request.getPrice());
 		order.setQuantity(request.getQuantity());
 	    order.setSkuCode(request.getSkuCode());
-		
 		return order;
 		
 		
 	}
 	public OrderResponse toResponse(Order order) {
-		return new OrderResponse(order.getOrderNumber(),order.getOrderStatus());
+		return new OrderResponse(order.getOrderNumber(),order.getOrderStatus(),order.getUserId());
 		
 	}
 	
