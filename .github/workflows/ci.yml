@@ -22,27 +22,28 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Verify the vendored JAR exists
-      - name: Check vendored JAR
+      # Debug: confirm current directory and contents of lib/
+      - name: Debug JAR path
         run: |
           echo "Current working directory:"
           pwd
-          echo "Listing lib folder:"
+          echo "Contents of lib folder:"
           ls -l lib
-          # Fail if the JAR does not exist
           if [ ! -f lib/ecommerce-common-events-0.0.1-SNAPSHOT.jar ]; then
             echo "ERROR: ecommerce-common-events-0.0.1-SNAPSHOT.jar not found in lib/"
             exit 1
           fi
 
-      # Install the vendored JAR to local Maven repo
+      # Install the vendored JAR to local Maven repository
       - name: Install vendored JAR
-        run: mvn install:install-file \
-             -Dfile=lib/ecommerce-common-events-0.0.1-SNAPSHOT.jar \
-             -DgroupId=com.artichourey.ecommerce \
-             -DartifactId=ecommerce-common-events \
-             -Dversion=0.0.1-SNAPSHOT \
-             -Dpackaging=jar
+        run: |
+          echo "Installing JAR from $(pwd)/lib/ecommerce-common-events-0.0.1-SNAPSHOT.jar"
+          mvn install:install-file \
+            -Dfile="$(pwd)/lib/ecommerce-common-events-0.0.1-SNAPSHOT.jar" \
+            -DgroupId=com.artichourey.ecommerce \
+            -DartifactId=ecommerce-common-events \
+            -Dversion=0.0.1-SNAPSHOT \
+            -Dpackaging=jar
 
       # Build the order-service project
       - name: Build order-service
