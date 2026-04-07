@@ -121,6 +121,8 @@
     <groupId>com.artichourey.ecommerce</groupId>
     <artifactId>ecommerce-common-events</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <scope>system</scope>
+    <systemPath>E:\E-Commerce_microservices\order-service/lib/ecommerce-common-events-0.0.1-SNAPSHOT.jar</systemPath>
 </dependency>
 		
 	</dependencies>
