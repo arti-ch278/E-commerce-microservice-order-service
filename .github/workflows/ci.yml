@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Java CI
 
 on:
   push:
@@ -20,16 +20,5 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Cache Maven dependencies
-      uses: actions/cache@v4
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-m2
-
-    - name: Build common module
-      run: mvn -f ecommerce-common-events/pom.xml clean install
-
-    - name: Build order service
-      run: mvn -f order-service/pom.xml clean install
+    - name: Build order-service
+      run: mvn clean install
