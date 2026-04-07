@@ -11,19 +11,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Set up Java 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # Add this step to verify the JAR exists
+      # Verify the vendored JAR exists
       - name: Check vendored JAR
-        run: ls -l lib
+        run: |
+          echo "Current working directory:"
+          pwd
+          echo "Listing lib folder:"
+          ls -l lib
+          # Fail if the JAR does not exist
+          if [ ! -f lib/ecommerce-common-events-0.0.1-SNAPSHOT.jar ]; then
+            echo "ERROR: ecommerce-common-events-0.0.1-SNAPSHOT.jar not found in lib/"
+            exit 1
+          fi
 
+      # Install the vendored JAR to local Maven repo
       - name: Install vendored JAR
         run: mvn install:install-file \
              -Dfile=lib/ecommerce-common-events-0.0.1-SNAPSHOT.jar \
@@ -32,5 +44,6 @@ jobs:
              -Dversion=0.0.1-SNAPSHOT \
              -Dpackaging=jar
 
+      # Build the order-service project
       - name: Build order-service
         run: mvn clean install
