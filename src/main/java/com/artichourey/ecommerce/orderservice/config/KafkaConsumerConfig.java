@@ -31,11 +31,10 @@ public class KafkaConsumerConfig {
         FixedBackOff fixedBackOff = new FixedBackOff(5000L, 3);
 
         // Dead Letter publishing recoverer
-        DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(kafkaTemplate,
-                (record, ex) -> {
-                    // Append ".DLT" to original topic
-                    return new TopicPartition(record.topic() + ".DLT", record.partition());
-                });
+        DeadLetterPublishingRecoverer recoverer =
+        	    new DeadLetterPublishingRecoverer(kafkaTemplate,
+        	        (record, ex) -> new TopicPartition("payment-request-topic.DLT", record.partition()));
+
 
         // Error handler
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(recoverer, fixedBackOff);
