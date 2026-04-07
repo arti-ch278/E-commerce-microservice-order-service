@@ -20,6 +20,10 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Add this step to verify the JAR exists
+      - name: Check vendored JAR
+        run: ls -l lib
+
       - name: Install vendored JAR
         run: mvn install:install-file \
              -Dfile=lib/ecommerce-common-events-0.0.1-SNAPSHOT.jar \
