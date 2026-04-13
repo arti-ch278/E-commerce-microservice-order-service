@@ -75,12 +75,12 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-		
+		<!--
 		<dependency>
     <groupId>net.logstash.logback</groupId>
     <artifactId>logstash-logback-encoder</artifactId>
     <version>7.4</version>
-    </dependency>
+    </dependency>  -->
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -121,8 +121,6 @@
     <groupId>com.artichourey.ecommerce</groupId>
     <artifactId>ecommerce-common-events</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <scope>system</scope>
-    <systemPath>E:\E-Commerce_microservices\order-service/lib/ecommerce-common-events-0.0.1-SNAPSHOT.jar</systemPath>
 </dependency>
 		
 	</dependencies>
