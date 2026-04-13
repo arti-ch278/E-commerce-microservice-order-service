@@ -1,6 +1,12 @@
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+
 spring:
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BROKER:kafka:9092}
 
     
     # CONSUMER CONFIG (receiving events)
@@ -14,7 +20,6 @@ spring:
       properties:
         # Delegate JSON deserializer
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
-
         # Allow only trusted packages (replace with your event package)
         spring.json.trusted.packages: com.artichourey.ecommerce.events
 
@@ -59,8 +64,8 @@ management:
       probability: 1.0
 
   zipkin:
-    base-url: http://localhost:9411
+    base-url: ${ZIPKIN_URL:http://localhost:9411}
     enabled: true
-logging:
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{traceId},%X{spanId}] %-5level %logger - %msg%n"
+#logging:
+ # pattern:
+  #  console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{traceId},%X{spanId}] %-5level %logger - %msg%n"
