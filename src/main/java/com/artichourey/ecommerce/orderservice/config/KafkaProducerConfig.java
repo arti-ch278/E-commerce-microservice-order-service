@@ -13,6 +13,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
+import io.micrometer.observation.ObservationRegistry;
+
 @Configuration
 public class KafkaProducerConfig {
 
@@ -22,6 +24,8 @@ public class KafkaProducerConfig {
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
+        
+        
 
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers); 
 
@@ -36,7 +40,15 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate<String, Object> kafkaTemplate(
+            ProducerFactory<String, Object> producerFactory,
+            ObservationRegistry observationRegistry) {
+
+        KafkaTemplate<String, Object> template = new KafkaTemplate<>(producerFactory);
+
+        template.setObservationEnabled(true); 
+        template.setObservationRegistry(observationRegistry);
+
+        return template;
     }
 }
